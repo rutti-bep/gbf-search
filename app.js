@@ -2,8 +2,15 @@
 const request = require("request");
 const Twitter = require("twitter");
 const ncp = require("copy-paste");
+const colors = require("colors");
 const fs = require("fs");
 
+var _ = require('lodash')
+const isTweet = _.conforms({
+  contributors: _.isObject,
+  id_str: _.isString,
+  text: _.isString,
+})
 const tokens = require("./tokens.json");
 
 console.log(tokens);
@@ -37,39 +44,52 @@ function search(){
   var client = new Twitter({
     consumer_key: tokens.consumerKey,
     consumer_secret: tokens.consumerSecret,
-    bearer_token: tokens.bearerToken
+    access_token_key: tokens.accessToken,
+    access_token_secret: tokens.accessTokenSecret
+      //bearer_token: tokens.bearerToken
   });
-  var params = {q : "参加者募集！"}   
-  setInterval(function (){
-  client.get('search/tweets', params, function(error, tweets, response) {
-    if (!error) {
-      for(var i = 0;i < tweets.statuses.length; i ++ ){
-        var text = tweets.statuses[i].text.replace(/\n/g,"");
-        if(text.match(/参加者募集！参戦ID：[0-9A-Z]{8}Lv[0-9]{2,3}\s.+https:\/\/t\.co\/[a-zA-Z0-9]+$/g)){
-          console.log("match : "+text);
 
-          var _bossName = text.match(/Lv[0-9]{2,3}\s.+https:/);
-          var bossName = _bossName[0].slice(0,_bossName.length-7);
+  client.stream('statuses/filter', {track: 'ID'}, function(stream) {
+    stream.on('data', function(event) {
+     try{
+       var text = event.text.replace(/\n/g,"");
+      if(text.match(/参加者募集！参戦ID：[0-9A-Z]{8}Lv[0-9]{2,3}\s.+https:\/\/t\.co\/[a-zA-Z0-9]+$/g)){
+        console.log("match : "+text);
 
-          var _battleId = text.match(/参戦ID：[0-9A-Z]{8}/).slice(-8);
-          var battleId = _battleId[0].slice(-8);
+        var _bossName = text.match(/Lv[0-9]{2,3}\s.+https:/);
+        var bossName = _bossName[0].slice(0,_bossName.length-7);
 
-          console.log("bossName : "+ bossName);
-          console.log("battleId : " + battleId);
+        var _battleId = text.match(/参戦ID：[0-9A-Z]{8}/).slice(-8);
+        var battleId = _battleId[0].slice(-8);
 
-          if(bossName.match(/Lv100 Dエンジェル・オリヴィエ/)){
-            console.log("copy : "+battleId);
-            (function(id){
-              return ncp.copy(id, function () {
-                console.log("copied! : "+id);
-              })
-            })(battleId);
-          }
+        console.log("bossName : "+ bossName);
+        console.log("battleId : " + battleId);
+
+        if(bossName.match(/Lv100\sセレスト・マグナ/)){
+          console.log("copy : "+battleId);
+          (function(id,name){
+            return ncp.copy(id, function () {
+              console.log(colors.bgWhite("copied! : "+bossName+id));
+            })
+          })(battleId,bossName);
+        }else if(bossName.match(/Lv100\s黒麒麟/)){
+          console.log("copy : "+battleId);
+          (function(id,name){
+            return ncp.copy(id, function () {
+              console.log(colors.rainbow("copied! : "+bossName+id + colorReset));
+            })
+          })(battleId,bossName);
         }
       }
-    }else{
-      console.log(error);
-    }
+     }catch(e){
+      console.log(e);
+      console.log(event.text)
+     }
+    });
+
+    stream.on('error', function(error) {
+      throw error;
+    });
   });
-  },1000*5);
+
 }
