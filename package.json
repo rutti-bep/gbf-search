@@ -1,0 +1,16 @@
+{
+  "name": "gbf-search",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "oauth": "^0.9.15",
+    "request": "^2.81.0",
+    "twitter": "^1.7.0"
+  }
+}
