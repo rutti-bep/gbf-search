@@ -5,17 +5,31 @@ const colors = require("colors");
 const fs = require("fs");
 
 const tokens = require("./tokens.json");
-const raids = require("./raids.json");
-
-var settings = {
+var raids,settings;
+try{
+  raids = require("./raids.json");
+/*  var newRaids = []
+  raids.map(function(raid){
+    newRaids.push({name:raid,flag:false});
+  })
+  raids = newRaids
+*/
+  raidsSort();
+  fs.writeFile('./raids.json', JSON.stringify(raids, null, '    '));
+}catch(e){
+  console.log("raids.jsonが読み込めませんでした")
+  raids = [];
+}
+/*try{
+  settings = require("./settings.json");
+}catch(e){
+  console.log("setting.jsonが読み込めませんでした")
+  */settings = {
   copy : true,
-  log : false,
-  catchRaid : new Array(raids.length)
-}
+  log : false
+  }
+//}
 
-for (var i = 0; i< settings.catchRaid.length; i++){
-  settings.catchRaid[i] = false
-}
 //console.log(tokens);
 
 raidsSort();
@@ -51,9 +65,9 @@ function search(){
 
           var notListin = true;
           for(var i = 0; i < raids.length; i++){
-            if(raids[i] == bossName){
+            if(raids[i].name == bossName){
               notListin = false;
-              if(settings.catchRaid[i]){
+              if(raids[i].flag){
                 if(settings.copy){
                   (function(id,name){
                     return ncp.copy(id, function () {
@@ -69,10 +83,9 @@ function search(){
 
           if(notListin){
             console.log("raid add! : " + bossName);
-            raids.push(bossName);
-            settings.catchRaid.push(false)
-           // raidsSort();
-            fs.writeFile('./raids.json', JSON.stringify(raids, null, '    '));
+            raids.push({name:bossName,flag:false});
+            raidsSort();
+            fs.writeFile('./raids.json', JSON.stringify(raids, null, ' '));
             if(settings.log){
               raidsPrint();
             }
@@ -92,21 +105,22 @@ function search(){
 
 function raidsSort(){
   raids.sort(function(a,b){
-    var aLv = Number(a.slice(2,5).replace(" ",""));
-    var bLv = Number(b.slice(2,5).replace(" ",""));
+    var aLv = Number(a.name.slice(2,5).replace(" ",""));
+    var bLv = Number(b.name.slice(2,5).replace(" ",""));
+    var _return;
     if(aLv == bLv){
-      return a.localeCompare(b);
+      return a.name.localeCompare(b.name);
     }else{
       return aLv >= bLv ? 1 : -1;
     }
   })
-
 }
 
 function raidsPrint(){
   console.log("~~raids~~");
   for(var i = 0; i < raids.length; i++){
-    console.log("id" + ("00"+i).slice(-2) + " : " + raids[i]);
+    var flagStr = raids[i].flag?colors.yellow(" true"):colors.blue("false");
+    console.log("id" + ("00"+i).slice(-2) + " catch: " + flagStr + " name: " + raids[i].name);
   }
   console.log("")
 }
@@ -120,11 +134,13 @@ process.stdin.on('data', function (chunk) {
         var splitedLine = line.split(/\s+/);
         if(raids[Number(splitedLine[2])] != undefined){
           if(splitedLine[1] == "on"){
-            settings.catchRaid[Number(splitedLine[2])] = true;
-            console.log("on : " + raids[Number(splitedLine[2])]);
+            raids[Number(splitedLine[2])].flag = true;
+            console.log("on : " + raids[Number(splitedLine[2])].name);
+            fs.writeFile('./raids.json', JSON.stringify(raids, null, ' '));
           }else{
-            settings.catchRaid[Number(splitedLine[2])] = false;
-            console.log("off : " + raids[Number(splitedLine[2])]);
+            raids[Number(splitedLine[2])].flag = false;
+            console.log("off : " + raids[Number(splitedLine[2])].name);
+            fs.writeFile('./raids.json', JSON.stringify(raids, null, ' '));
           }
         }else{
           console.log("sorry! not found!")
@@ -147,5 +163,5 @@ process.stdin.on('data', function (chunk) {
 });
 // EOFがくると発生するイベント
 process.stdin.on('end', function () {
-  cconsole.log("end!")
+  console.log("end!")
 });
