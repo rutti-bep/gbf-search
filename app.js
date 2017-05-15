@@ -147,10 +147,10 @@ process.stdin.on('data', function (chunk) {
         }
       }else if(line.match(/^copy on/)){
         settings.copy = true;
-        console.log("copy on")
+        console.log("OK! copy on")
       }else if(line.match(/^copy off/)){
         settings.copy = false;
-        console.log("copy off")
+        console.log("OK! copy off")
       }else if(line.match(/^raids/)){
         raidsPrint();
       }else if(line.match(/^settings/)){
