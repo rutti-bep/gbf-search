@@ -16,13 +16,9 @@ var settings = {
 for (var i = 0; i< settings.catchRaid.length; i++){
   settings.catchRaid[i] = false
 }
-raids.sort(function(a,b){
-  var aLv = Number(a.slice(2,5).replace(" ",""));
-  var bLv = Number(b.slice(2,5).replace(" ",""));
-  return aLv > bLv ? 1 : -1;
-})
 //console.log(tokens);
 
+raidsSort();
 raidsPrint();
 search();
 
@@ -58,30 +54,28 @@ function search(){
             if(raids[i] == bossName){
               notListin = false;
               if(settings.catchRaid[i]){
-                console.log("match");
                 if(settings.copy){
                   (function(id,name){
-                  return ncp.copy(id, function () {
-                    console.log(colors.yellow("copied! : "+name+" id : "+id));
-                  })
-                })(battleId,bossName);
-               }else{
-                   console.log(colors.blue("copied! : "+bossName+" id : "+battleId));
-               }
+                    return ncp.copy(id, function () {
+                      console.log(colors.yellow("copied! : "+name+" id : "+id));
+                    })
+                  })(battleId,bossName);
+                }else{
+                  console.log(colors.blue("copied! : "+bossName+" id : "+battleId));
+                }
               }
             }
           }
 
           if(notListin){
-            console.log("raid add!")
+            console.log("raid add! : " + bossName);
             raids.push(bossName);
-            raids.sort(function(a,b){
-              var aLv = Number(a.slice(2,5).replace(" ",""));
-              var bLv = Number(b.slice(2,5).replace(" ",""));
-              return aLv >= bLv ? 1 : -1;
-            })
+            settings.catchRaid.push(false)
+           // raidsSort();
             fs.writeFile('./raids.json', JSON.stringify(raids, null, '    '));
-            raidsPrint();
+            if(settings.log){
+              raidsPrint();
+            }
           }
         }
       }catch(e){
@@ -94,6 +88,19 @@ function search(){
       throw error;
     });
   });
+}
+
+function raidsSort(){
+  raids.sort(function(a,b){
+    var aLv = Number(a.slice(2,5).replace(" ",""));
+    var bLv = Number(b.slice(2,5).replace(" ",""));
+    if(aLv == bLv){
+      return a.localeCompare(b);
+    }else{
+      return aLv >= bLv ? 1 : -1;
+    }
+  })
+
 }
 
 function raidsPrint(){
