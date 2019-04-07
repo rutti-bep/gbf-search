@@ -6,20 +6,6 @@ const fs = require("fs");
 
 const tokens = require("./tokens.json");
 var raids,settings;
-try{
-  raids = require("./raids.json");
-/*  var newRaids = []
-  raids.map(function(raid){
-    newRaids.push({name:raid,flag:false});
-  })
-  raids = newRaids
-*/
-  raidsSort();
-  fs.writeFile('./raids.json', JSON.stringify(raids, null, '    '));
-}catch(e){
-  console.log("raids.jsonが読み込めませんでした")
-  raids = [];
-}
 /*try{
   settings = require("./settings.json");
 }catch(e){
