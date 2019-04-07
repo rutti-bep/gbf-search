@@ -4,10 +4,11 @@
   "version":"0.0.1",
   "description":"お空の戦いを探す",
   "browser_action": {
-    "default_popup": "dest/html/test.html"
+    "default_popup": "dest/html/popup.html"
   },
   "background":{
     "scripts":[
+      "dest/js/background.js"
     ]
   },
   "permissions": [
