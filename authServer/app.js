@@ -18,7 +18,7 @@ console.log(keyword+'を含むツイートを取得します。');
 
 
 var app = require('http').createServer(function(req, res) {
-}).listen(3000);
+}).listen(process.env.PORT||3000);
 
 const io = require('socket.io').listen(app);
 io.sockets.on('connection', function(socket) {
