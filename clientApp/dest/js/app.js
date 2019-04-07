@@ -1,7 +1,8 @@
 $(function() {
+  var appToggle = $("#appToggle");
+  var raidsListToggle = $("#raidsListToggle");
   var raidsList = $("#raidsList");
   var copyLogs = $("#copyLogs");
-  var appToggle = $("#appToggle");
   
   var raids = [];
 
@@ -28,6 +29,10 @@ $(function() {
     }
   });
 
+  raidsListToggle.click(()=>{
+    raidsListToggle.prop("checked");
+    raidsList.slideToggle();
+  });
 
   function isCopyRaid(text){
     var _bossName = text.match(/Lv[0-9]{2,3}[\s\S]+https:/);
@@ -70,16 +75,34 @@ $(function() {
     console.log(raids);
     raidsList.empty();
     raids.forEach((raid,index)=>{
-      $raidsButton = $('<button/>').text(raid.name).click(()=> { 
-        raids[index].flag=!raids[index].flag;
-        console.log(raids);
+      var $raidSpan = $("<li></li>").css({"height":"100%"})
+      let $raidToggleButton = $('<input></input>',{
+        type: "checkbox",
+        checked: raids[index].flag,
+        //css: {float:"left"},
+        on: {
+          click:()=> { 
+            $raidToggleButton.prop("checked");
+            raids[index].flag=!raids[index].flag;
+            console.log(raids);
+          }
+        }
       });
-      raidsList.append($raidsButton);
+      let $raidNameLabel = $('<div></div>',{
+        text:raid.name,
+        css: {"display": "inline"}
+      });
+      $raidSpan.append($raidToggleButton);
+      $raidSpan.append($raidNameLabel);
+      raidsList.append($raidSpan);
     })
   }
 
   function execRaidCopy(string){
     copyLogs.prepend("<div>"+string+"</div>");
+    if(copyLogs.children().length>15){
+      copyLogs.children().last().remove();
+    }
 
     var _battleId = string.match(/[0-9A-Z]{8}\s:参戦ID/);
     var battleId = _battleId[0].slice(0,8);
