@@ -1,16 +1,32 @@
 $(function() {
   var raidsList = $("#raidsList");
   var copyLogs = $("#copyLogs");
+  var appToggle = $("#appToggle");
   
   var raids = [];
 
-  const socket = io.connect("https://obscure-forest-66282.herokuapp.com/");
+  var socket = io.connect("https://obscure-forest-66282.herokuapp.com/");
   socket.on('msg', function(data) {
-    console.log(data);
+    //console.log(data);
     if(isCopyRaid(data)){      
       execRaidCopy(data);
     }
-  });  
+  });
+  
+  appToggle.click(()=>{
+    isRunApp = !appToggle.prop("checked");
+    if(isRunApp){
+      socket.close();
+    }else{
+      socket = io.connect("https://obscure-forest-66282.herokuapp.com/");
+      socket.on('msg', function(data) {
+        //console.log(data);
+        if(isCopyRaid(data)){      
+          execRaidCopy(data);
+        }
+      });
+    }
+  });
 
 
   function isCopyRaid(text){
@@ -63,7 +79,7 @@ $(function() {
   }
 
   function execRaidCopy(string){
-    copyLogs.append("<div>"+string+"</div>");
+    copyLogs.prepend("<div>"+string+"</div>");
 
     var _battleId = string.match(/[0-9A-Z]{8}\s:参戦ID/);
     var battleId = _battleId[0].slice(0,8);
