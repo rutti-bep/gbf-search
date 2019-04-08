@@ -3,14 +3,6 @@ $(function() {
   var raidsListToggles = $(".raidsListToggles");
   var copyLogs = $("#copyLogs");
   
-  var socket = io.connect("https://obscure-forest-66282.herokuapp.com/");
-  socket.on('msg', function(data) {
-    //console.log(data);
-    if(isCopyRaid(data)){      
-      execRaidCopy(data);
-    }
-  });
-
 
   chrome.runtime.sendMessage({"method":"getRunApp"},(res)=>{
     appToggle.prop('checked', res["isRun"]);
@@ -111,6 +103,18 @@ $(function() {
     });
     return returnValue;
   }
+  
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+    console.log(request);
+    switch (request.method){
+      case "raidsAdd":
+        raids["Other"][0].push(request.raid);
+        console.log(raids["Other"][0]);
+        raidsOtherSort();
+        raidsOtherListUpdate();
+        break;
+    }
+});
 
   function raidsOtherSort(){
     raids["Other"][0].sort(function(a,b){
@@ -139,14 +143,10 @@ $(function() {
           click:()=> { 
             var isCopy = $raidToggleButton.prop("checked");
             if(isCopy){
-              raidsCopyList.push(raid)
+              chrome.runtime.sendMessage({"method":"addCopyList","raid":raid});
             }else{
-              raidsCopyList = raidsCopyList.filter((raidName)=>{
-                return raidName !== raid
-              })
+              chrome.runtime.sendMessage({"method":"deleteCopyList","raid":raid});
             }
-            localStorage.setItem("raidsCopyList",JSON.stringify(raidsCopyList));
-            console.log(raidsCopyList)
           }
         }
       });

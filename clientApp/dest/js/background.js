@@ -85,6 +85,7 @@ function isCopyRaid(text){
     raids["Other"][0].push(bossName);
     console.log(raids["Other"][0]);
     raidsOtherSort();
+    chrome.runtime.sendMessage({"method":"raidsAdd","raid":bossName}); 
   }
 
   raidsCopyList.forEach((raid)=>{
