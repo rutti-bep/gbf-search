@@ -1,11 +1,8 @@
 $(function() {
   var appToggle = $("#appToggle");
-  var raidsListToggle = $("#raidsListToggle");
-  var raidsList = $("#raidsList");
+  var raidsListToggles = $(".raidsListToggles");
   var copyLogs = $("#copyLogs");
   
-  var raids = [];
-
   var socket = io.connect("https://obscure-forest-66282.herokuapp.com/");
   socket.on('msg', function(data) {
     //console.log(data);
@@ -29,73 +26,144 @@ $(function() {
     }
   });
 
-  raidsListToggle.click(()=>{
-    raidsListToggle.prop("checked");
-    raidsList.slideToggle();
+  raidsListToggles.each((i,toggleElm)=>{
+    $(toggleElm).click(()=>{
+      $(toggleElm).prop("checked");
+      $("#raidsList"+$(toggleElm).data("level")).slideToggle();
+    });
   });
+  
+  //raids情報取得
+  var raids = {};
+  var file = 'dest/json/raids.json';
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', chrome.runtime.getURL(file), true);
+  xhr.onreadystatechange = function() {
+    if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
+      raids = JSON.parse(xhr.responseText);
+      raids["Other"] = [new Array()];
+      Object.keys(raids).forEach(function(level) {
+          var $level = $("#raidsList"+level);
+          console.log($level)
+          Object.keys(raids[level]).forEach(function(stars) {
+              $star = $("<ol></ol>");
+              $level.append($star);
+              raids[level][stars].forEach((raidName)=>{
+                var $raidSpan = $("<li></li>");
+                let $raidToggleButton = $('<input></input>',{
+                  type: "checkbox",
+                  //css: {float:"left"},
+                  on: {
+                    click:()=> { 
+                      var isCopy = $raidToggleButton.prop("checked");
+                      if(isCopy){
+                        raidsCopyList.push(raidName)
+                      }else{
+                        raidsCopyList = raidsCopyList.filter((_RaidName)=>{
+                          return _RaidName !== raidName
+                        })
+                      }
+                      console.log(raidsCopyList)
+                    }
+                  }
+                });
+                let $raidNameLabel = $('<div></div>',{
+                  text:raidName,
+                  css: {"display": "inline"}
+                });
+                $raidSpan.append($raidToggleButton);
+                $raidSpan.append($raidNameLabel);
+                $star.append($raidSpan);
+              });
+          });
+      });
+    }
+  };
+  xhr.send();
+
+  //raidsコピーするかのリスト
+  var raidsCopyList = [];
+  var raidsOtherList=[];
 
   function isCopyRaid(text){
     var _bossName = text.match(/Lv[0-9]{2,3}[\s\S]+https:/);
     var bossName = _bossName[0].slice(0,_bossName.length-7);
 
     var notListin = true;
-    for(var i = 0; i < raids.length; i++){
-      if(raids[i].name == bossName){
-        notListin = false;
-        if(raids[i].flag){
-          return true;
-        }else{
-          return false;
-        }
-      }
-    }
+    var returnValue = false;
+    Object.keys(raids).forEach(function(level) {
+          Object.keys(raids[level]).forEach(function(stars) {
+              raids[level][stars].forEach((raidName)=>{
+                if(raidName == bossName){
+                  notListin = false;
+                }
+              })
+          })
+    });
+
 
     if(notListin){
       console.log("raid add! : " + bossName);
-      raids.push({name:bossName,flag:false});
-      raidsSort();
-      raidsListUpdate();
+      raids["Other"][0].push(bossName);
+      console.log(raids["Other"][0]);
+      raidsOtherSort();
+      raidsOtherListUpdate();
     }
+
+    raidsCopyList.forEach((raid)=>{
+      if(raid == bossName){
+        returnValue = true;
+      }
+    });
+    return returnValue;
   }
 
-  function raidsSort(){
-    raids.sort(function(a,b){
-      var aLv = Number(a.name.slice(2,5).replace(" ",""));
-      var bLv = Number(b.name.slice(2,5).replace(" ",""));
+  function raidsOtherSort(){
+    raids["Other"][0].sort(function(a,b){
+      var aLv = Number(a.slice(2,5).replace(" ",""));
+      var bLv = Number(b.slice(2,5).replace(" ",""));
       var _return;
       if(aLv == bLv){
-        return a.name.localeCompare(b.name);
+        return a.localeCompare(b);
       }else{
         return aLv >= bLv ? 1 : -1;
       }
     })
   }
 
-  function raidsListUpdate(){
-    console.log(raids);
-    raidsList.empty();
-    raids.forEach((raid,index)=>{
-      var $raidSpan = $("<li></li>").css({"height":"100%"})
+  function raidsOtherListUpdate(){
+    $List = $("#raidsListOther");
+    $List.empty();
+    $listOrderedList = $("<ol></ol>")
+    raids["Other"][0].forEach((raid,index)=>{
+      var $raidSpan = $("<li></li>");
       let $raidToggleButton = $('<input></input>',{
         type: "checkbox",
-        checked: raids[index].flag,
+        checked: raidsCopyList.includes(raid),
         //css: {float:"left"},
         on: {
           click:()=> { 
-            $raidToggleButton.prop("checked");
-            raids[index].flag=!raids[index].flag;
-            console.log(raids);
+            var isCopy = $raidToggleButton.prop("checked");
+            if(isCopy){
+              raidsCopyList.push(raid)
+            }else{
+              raidsCopyList = raidsCopyList.filter((raidName)=>{
+                return raidName !== raid
+              })
+            }
+            console.log(raidsCopyList)
           }
         }
       });
       let $raidNameLabel = $('<div></div>',{
-        text:raid.name,
+        text:raid,
         css: {"display": "inline"}
       });
       $raidSpan.append($raidToggleButton);
       $raidSpan.append($raidNameLabel);
-      raidsList.append($raidSpan);
+      $listOrderedList.append($raidSpan);
     })
+    $List.append($listOrderedList)
   }
 
   function execRaidCopy(string){
