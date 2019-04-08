@@ -9,7 +9,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
       break;
     case "toggleRunApp": 
       isRunApp = !isRunApp;      
-      console.log("copy",isRunApp)
+      console.log("move",isRunApp)
       if(isRunApp){
         socket = io.connect("https://obscure-forest-66282.herokuapp.com/");
         socket.on('msg', function(data) {
@@ -26,6 +26,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
       response["isRun"]=isRunApp;
       break;
     case "getCopyList":
+      console.log(raidsCopyList);
       response["list"]=raidsCopyList;
       break;
     case "addCopyList":
@@ -41,6 +42,9 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
       localStorage.setItem("raidsCopyList",JSON.stringify(raidsCopyList)); 
       console.log(raidsCopyList)
       response["list"]=raidsCopyList;
+      break;
+    case "getRaids":
+      response["raids"]=raids;
       break;
   }
   sendResponse(response);
