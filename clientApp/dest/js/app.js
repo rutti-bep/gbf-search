@@ -35,6 +35,7 @@ $(function() {
   
   //raids情報取得
   var raids = {};
+  var raidsCopyList = localStorage.getItem("raidsCopyList")!==null?JSON.parse(localStorage.getItem("raidsCopyList")):[];
   var file = 'dest/json/raids.json';
   var xhr = new XMLHttpRequest();
   xhr.open('GET', chrome.runtime.getURL(file), true);
@@ -52,6 +53,7 @@ $(function() {
                 var $raidSpan = $("<li></li>");
                 let $raidToggleButton = $('<input></input>',{
                   type: "checkbox",
+                  checked: raidsCopyList.includes(raidName),
                   //css: {float:"left"},
                   on: {
                     click:()=> { 
@@ -63,6 +65,7 @@ $(function() {
                           return _RaidName !== raidName
                         })
                       }
+                      localStorage.setItem("raidsCopyList",JSON.stringify(raidsCopyList));
                       console.log(raidsCopyList)
                     }
                   }
@@ -82,8 +85,6 @@ $(function() {
   xhr.send();
 
   //raidsコピーするかのリスト
-  var raidsCopyList = [];
-  var raidsOtherList=[];
 
   function isCopyRaid(text){
     var _bossName = text.match(/Lv[0-9]{2,3}[\s\S]+https:/);
@@ -151,6 +152,7 @@ $(function() {
                 return raidName !== raid
               })
             }
+            localStorage.setItem("raidsCopyList",JSON.stringify(raidsCopyList));
             console.log(raidsCopyList)
           }
         }
