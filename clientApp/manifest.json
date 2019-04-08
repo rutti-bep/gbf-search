@@ -8,6 +8,7 @@
   },
   "background":{
     "scripts":[
+      "dest/js/socket.io.js",
       "dest/js/background.js"
     ]
   },
