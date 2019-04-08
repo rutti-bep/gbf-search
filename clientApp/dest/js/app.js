@@ -10,20 +10,16 @@ $(function() {
       execRaidCopy(data);
     }
   });
+
+
+  chrome.runtime.sendMessage({"method":"getRunApp"},(res)=>{
+    appToggle.prop('checked', res["isRun"]);
+    console.log(res)
+  }); 
   
   appToggle.click(()=>{
-    isRunApp = !appToggle.prop("checked");
-    if(isRunApp){
-      socket.close();
-    }else{
-      socket = io.connect("https://obscure-forest-66282.herokuapp.com/");
-      socket.on('msg', function(data) {
-        //console.log(data);
-        if(isCopyRaid(data)){      
-          execRaidCopy(data);
-        }
-      });
-    }
+    appToggle.prop("checked");
+    chrome.runtime.sendMessage({"method":"toggleRunApp"}); 
   });
 
   raidsListToggles.each((i,toggleElm)=>{
@@ -34,9 +30,9 @@ $(function() {
   });
   
   //raids情報取得
-  var raids = {};
-  var raidsCopyList = localStorage.getItem("raidsCopyList")!==null?JSON.parse(localStorage.getItem("raidsCopyList")):[];
+  var raids = {}
   var file = 'dest/json/raids.json';
+  var raidsCopyList = localStorage.getItem("raidsCopyList")!==null?JSON.parse(localStorage.getItem("raidsCopyList")):[];
   var xhr = new XMLHttpRequest();
   xhr.open('GET', chrome.runtime.getURL(file), true);
   xhr.onreadystatechange = function() {
@@ -59,13 +55,10 @@ $(function() {
                     click:()=> { 
                       var isCopy = $raidToggleButton.prop("checked");
                       if(isCopy){
-                        raidsCopyList.push(raidName)
+                        chrome.runtime.sendMessage({"method":"addCopyList","raid":raidName});
                       }else{
-                        raidsCopyList = raidsCopyList.filter((_RaidName)=>{
-                          return _RaidName !== raidName
-                        })
+                        chrome.runtime.sendMessage({"method":"deleteCopyList","raid":raidName});
                       }
-                      localStorage.setItem("raidsCopyList",JSON.stringify(raidsCopyList));
                       console.log(raidsCopyList)
                     }
                   }
