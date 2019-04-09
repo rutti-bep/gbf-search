@@ -123,6 +123,7 @@ function saveToClipboard(str) {
   textArea.select();
   console.log(str,document.execCommand("copy"));
 
+  chrome.browserAction.setBadgeText({text:String(new Date().getSeconds())});
   document.body.removeChild(textArea);
 }
 
