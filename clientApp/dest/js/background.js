@@ -1,6 +1,8 @@
 var isRunApp = false;
 
 var socket;
+chrome.browserAction.setBadgeBackgroundColor({ color: [255, 0, 0, 255] });
+
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   var response = {"status":true};
   switch (request.method){
@@ -12,6 +14,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
       console.log("move",isRunApp)
       if(isRunApp){
         socket = io.connect("https://obscure-forest-66282.herokuapp.com/");
+        chrome.browserAction.setBadgeBackgroundColor({ color: [31, 155, 31, 255] });
         socket.on('msg', function(data) {
           //console.log(data);
           if(isCopyRaid(data)){      
@@ -19,6 +22,9 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
             var battleId = _battleId[0].slice(0,8);
             saveToClipboard(battleId);
           }
+        });
+        socket.on('disconnect', function(){
+          chrome.browserAction.setBadgeBackgroundColor({ color: [255, 0, 0, 255] });
         });
       }else{
         socket.close();
@@ -33,7 +39,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
       raidsCopyList.push(request.raid);
       localStorage.setItem("raidsCopyList",JSON.stringify(raidsCopyList));
       console.log(raidsCopyList)
-      response["list"]=raidsCopyList;
+        response["list"]=raidsCopyList;
       break;
     case "deleteCopyList":
       raidsCopyList = raidsCopyList.filter((raidName)=>{
@@ -41,7 +47,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
       });
       localStorage.setItem("raidsCopyList",JSON.stringify(raidsCopyList)); 
       console.log(raidsCopyList)
-      response["list"]=raidsCopyList;
+        response["list"]=raidsCopyList;
       break;
     case "getRaids":
       response["raids"]=raids;
