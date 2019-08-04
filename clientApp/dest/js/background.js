@@ -74,10 +74,10 @@ xhr.send();
 //raidsコピーするかのリスト
 
 function isCopyRaid(text){
-  console.log(text);
+//  console.log(text);
   var _bossName = text.match(/参加者募集！[\s\S]+https:/);
   var bossName = _bossName[0].slice(6,_bossName.length-7);
-  console.log(bossName)
+//  console.log(bossName)
 
   var notListin = true;
   var returnValue = false;
