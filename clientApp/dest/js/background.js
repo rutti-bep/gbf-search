@@ -76,8 +76,8 @@ xhr.send();
 function isCopyRaid(text){
   console.log(text);
   var _bossName = text.match(/参加者募集！[\s\S]+https:/);
-  console.log(_bossName)
-  var bossName = _bossName[0].slice(0,_bossName.length-7);
+  var bossName = _bossName[0].slice(6,_bossName.length-7);
+  console.log(bossName)
 
   var notListin = true;
   var returnValue = false;
