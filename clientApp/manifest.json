@@ -13,7 +13,6 @@
     ]
   },
   "permissions": [
-    "https://obscure-forest-66282.herokuapp.com/socket.io/socket.io.js",
     "https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js",
     "clipboardWrite",
     "storage"
@@ -22,5 +21,5 @@
     "dest/html/oauthPage.html*",
     "dest/html/retweetSet.html"
   ],
-  "content_security_policy":"script-src 'self' https://obscure-forest-66282.herokuapp.com https://ajax.googleapis.com; object-src 'self'"
+  "content_security_policy":"script-src 'self' https://gbf-search.herokuapp.com https://ajax.googleapis.com; object-src 'self'"
 }

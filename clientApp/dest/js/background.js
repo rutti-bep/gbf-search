@@ -13,7 +13,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
       isRunApp = !isRunApp;      
       console.log("move",isRunApp)
       if(isRunApp){
-        socket = io.connect("https://obscure-forest-66282.herokuapp.com/");
+        socket = io.connect("https://gbf-seacrh.herokuapp.com/");
         chrome.browserAction.setBadgeBackgroundColor({ color: [31, 155, 31, 255] });
         socket.on('msg', function(data) {
           //console.log(data);
