@@ -13,6 +13,7 @@
     ]
   },
   "permissions": [
+    "https://gbf-search.herokuapp.com/socket.io/socket.io.js",
     "https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js",
     "clipboardWrite",
     "storage"
