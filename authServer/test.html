@@ -2,11 +2,11 @@
 <!DOCTYPE html>
 <meta charset="UTF-8">
 <title>chat</title>
-<script src="https://obscure-forest-66282.herokuapp.com/socket.io/socket.io.js"></script>
+<script src="https://gbf-search.herokuapp.com/socket.io/socket.io.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <script>
 $(function() {
-    var socket = io.connect("https://obscure-forest-66282.herokuapp.com/");
+    var socket = io.connect("https://gbf-search.herokuapp.com/");
       $('form').submit(function() {
             socket.emit('msg', $('input').val());
                 $('input').val('');
