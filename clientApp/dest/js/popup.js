@@ -132,15 +132,4 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     $List.append($listOrderedList)
   }
 
-  function execRaidCopy(string){
-    copyLogs.prepend("<div>"+string+"</div>");
-    if(copyLogs.children().length>15){
-      copyLogs.children().last().remove();
-    }
-
-    var _battleId = string.match(/[0-9A-Z]{8}\s:参戦ID/);
-    var battleId = _battleId[0].slice(0,8);
-
-    chrome.runtime.sendMessage({text: battleId});
-  }
 });
