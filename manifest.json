@@ -4,6 +4,7 @@
   "version":"0.2.0",
   "description":"お空の戦いを探す",
   "icons":{
+    "128":"dest/images/gbf-search-icon-128.png"
   },
   "browser_action": {
     "default_popup": "dest/html/popup.html"
