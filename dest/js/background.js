@@ -30,6 +30,7 @@ function setBadge(text){
 var raids = {};
 var raidsCopyList = localStorage.getItem("raidsCopyList")!==null?JSON.parse(localStorage.getItem("raidsCopyList")):[];
 var file = 'dest/json/raids.json';
+
 var xhr = new XMLHttpRequest();
 xhr.open('GET', chrome.runtime.getURL(file), true);
 xhr.onreadystatechange = function() {
@@ -89,6 +90,10 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         twitterController.StartStream(raidsCopyList);
       }
       response["list"]=raidsCopyList;
+      break;
+    case "addOtherRaids":
+      raids["Other"][0].push(request.bossName);
+      response["raids"]=raids;
       break;
     case "getRaids":
       response["raids"]=raids;
