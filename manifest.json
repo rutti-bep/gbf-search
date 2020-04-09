@@ -10,16 +10,18 @@
   },
   "background":{
     "scripts":[
-      "bundle.js"
+      "dest/js/bundle-twitter.js",
+      "dest/js/background.js"
     ]
   },
   "permissions": [
-    "https://stream.twitter.com/1.1/statuses/filter.json"
+    "https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js",
+    "https://stream.twitter.com/1.1/statuses/filter.json",
+    "clipboardWrite",
+    "storage"
   ],
   "web_accessible_resources": [
-    "dest/html/oauthPage.html*",
-    "dest/html/retweetSet.html"
   ],
-  "content_security_policy":"script-src 'self' https://stream.twitter.com/1.1/statuses/filter.json; object-src 'self'"
+  "content_security_policy":"script-src 'self' https://stream.twitter.com/1.1/statuses/filter.json https://ajax.googleapis.com; object-src 'self'"
 }
 

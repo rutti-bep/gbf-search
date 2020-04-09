@@ -1,65 +1,103 @@
-console.log("!!!");
+console.log("load : background.js")
 
-const twitterToken = {
-  "consumer_key":"DB7Fo4mQh2oKEGlTmH5LRAtGQ",
-  "consumer_secret":"MbOLda86zlX4XIh5EbJJdum93cVK8j2Cg2Qps4UQ8Z9Bq4bziN",
-  "access_token_key":"715302500379693056-6iD7svP3K38Ht55bS6ZxIjl4gY7r2UH",
-  "access_token_secret":"P5Brj4NUFrvpu8TPgZGqur6gH3WRYgtaJMH5mTyeuB4O71",
+function clipboardCopy(str){
+  var _battleId = str.match(/[0-9A-Z]{8}\s:参戦ID/);
+  var battleId = _battleId[0].slice(0,8);
+  var textArea = document.createElement("textarea");
+  textArea.style.cssText = "position:absolute;left:-100%";
 
+  document.body.appendChild(textArea);
+
+  textArea.value = battleId;
+  textArea.select();
+  console.log(str,document.execCommand("copy"));
+
+  chrome.browserAction.setBadgeText({text:String(new Date().getSeconds())});
+  document.body.removeChild(textArea);
 }
 
-const auth = {
-  "oauth_consumer_key":twitterToken["consumer_key"],
-  "oauth_nonce":"hoge",
-  "oauth_signature_method":"HMAC-SHA1",
-  "oauth_timestamp":String(Math.floor((new Date())/1000)),
-  "oauth_token":twitterToken["access_token_key"],
-  "oauth_version":'1.0'
+function setBadge(text){
+  switch (text){
+    case "red":
+      chrome.browserAction.setBadgeBackgroundColor({ color: [255, 0, 0, 255] });
+      break;
+    case "green":
+      chrome.browserAction.setBadgeBackgroundColor({ color: [31, 155, 31, 255] });
+      break;
+  }
 }
 
-const uri_encode = function(text){
-    return encodeURIComponent(text).replace(/[!'()]/g, escape).replace(/\*/g, "%2A");
-};
-
-const generateSignature = function(method, uri, params, oauth_secret){
-  var key_array = [], key, i, l, base_string, sorted_params;
-
-  base_string = method.toUpperCase() + '&' + uri_encode(uri) + '&';
-
-  for(key in params){
-    if(params.hasOwnProperty(key)){
-      key_array[key_array.length] = key;
-    }
-  }
-  key_array.sort();
-  l = key_array.length;
-
-  sorted_params = [];
-  for(i=0;i<l;i++){
-    sorted_params[sorted_params.length] = (key_array[i] + '=' + uri_encode(params[key_array[i]]));
-  }
-  base_string += uri_encode(sorted_params.join('&'));
-  console.log(base_string);
-
-  if(!oauth_secret){
-    oauth_secret = '';
-  }
-
-  var shaObj = new jsSHA(base_string, 'TEXT');
-  var secret_key = this.consumer_secret + '&' + oauth_secret;
-  console.log(secret_key)
-
-  return uri_encode(shaObj.getHMAC(secret_key, 'TEXT', 'SHA-1', 'B64'));
-}
-
-console.log(generateSignature("POST","https://stream.twitter.com/1.1/statuses/filter.json?track=%E5%8F%82%E5%8A%A0%E8%80%85%E5%8B%9F%E9%9B%86%EF%BC%81",auth,twitterToken))
-
-//const auth = 'OAuth oauth_consumer_key="DB7Fo4mQh2oKEGlTmH5LRAtGQ",oauth_nonce="b9980662fe9441e59bdc59a915f598a2",oauth_signature_method="HMAC-SHA1",oauth_timestamp="1586452212",oauth_token="715302500379693056-6iD7svP3K38Ht55bS6ZxIjl4gY7r2UH",oauth_version="1.0",oauth_signature="ZPdbLHjsDY6EdohcmoDTXOjZUIc%3D"'
+var raids = {};
+var raidsCopyList = localStorage.getItem("raidsCopyList")!==null?JSON.parse(localStorage.getItem("raidsCopyList")):[];
+var file = 'dest/json/raids.json';
 var xhr = new XMLHttpRequest();
-
-xhr.open("POST", "https://stream.twitter.com/1.1/statuses/filter.json?track=%E5%8F%82%E5%8A%A0%E8%80%85%E5%8B%9F%E9%9B%86%EF%BC%81", true);
-xhr.setRequestHeader('Authorization', auth);
-xhr.addEventListener('load', function() {
-    console.log(xhr.responseText);
-});
+xhr.open('GET', chrome.runtime.getURL(file), true);
+xhr.onreadystatechange = function() {
+  if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
+    raids = JSON.parse(xhr.responseText);
+    raids["Other"] = [new Array()];
+    console.log(raids)
+  }
+}
 xhr.send();
+
+//ひ・み・つ
+const tokens = {
+      consumer_key:"DB7Fo4mQh2oKEGlTmH5LRAtGQ",
+      consumer_secret:"MbOLda86zlX4XIh5EbJJdum93cVK8j2Cg2Qps4UQ8Z9Bq4bziN",
+      access_token_key:"715302500379693056-6iD7svP3K38Ht55bS6ZxIjl4gY7r2UH",
+      access_token_secret:"P5Brj4NUFrvpu8TPgZGqur6gH3WRYgtaJMH5mTyeuB4O7"
+}
+
+const twitterController = new twitterConnectionController(tokens);
+
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+  var response = {"status":true};
+  switch (request.method){
+    case "getRunApp":
+      response["isRun"]= twitterController.stream!=null;
+      break;
+    case "toggleRunApp": 
+      if(twitterController.stream!=null){
+        twitterController.StopStream();
+        setBadge("red"); 
+        response["isRun"]=false;
+      }else{
+        twitterController.StartStream(raidsCopyList);
+        response["isRun"]=true;
+      }
+      break;
+    case "getCopyList":
+      response["list"]=raidsCopyList;
+      break;
+    case "addCopyList":
+      raidsCopyList.push(request.raid);
+      localStorage.setItem("raidsCopyList",JSON.stringify(raidsCopyList));
+      if(twitterController.stream!=null){
+        twitterController.StopStream();
+        twitterController.StartStream(raidsCopyList);
+      }
+      response["list"]=raidsCopyList;
+      break;
+    case "deleteCopyList":
+      raidsCopyList = raidsCopyList.filter((raidName)=>{
+        return request.raid !== raidName
+      });
+      localStorage.setItem("raidsCopyList",JSON.stringify(raidsCopyList)); 
+      if(twitterController.stream!=null){
+        twitterController.StopStream();
+        twitterController.StartStream(raidsCopyList);
+      }
+      response["list"]=raidsCopyList;
+      break;
+    case "getRaids":
+      response["raids"]=raids;
+      break;
+  }
+  console.log(response);
+  sendResponse(response);
+});
+
+
+
+
