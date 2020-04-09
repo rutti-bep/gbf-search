@@ -1,0 +1,25 @@
+{
+  "manifest_version": 2,
+  "name": "gbf-search",
+  "version":"0.2.0",
+  "description":"お空の戦いを探す",
+  "icons":{
+  },
+  "browser_action": {
+    "default_popup": "dest/html/popup.html"
+  },
+  "background":{
+    "scripts":[
+      "bundle.js"
+    ]
+  },
+  "permissions": [
+    "https://stream.twitter.com/1.1/statuses/filter.json"
+  ],
+  "web_accessible_resources": [
+    "dest/html/oauthPage.html*",
+    "dest/html/retweetSet.html"
+  ],
+  "content_security_policy":"script-src 'self' https://stream.twitter.com/1.1/statuses/filter.json; object-src 'self'"
+}
+
