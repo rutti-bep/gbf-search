@@ -1,29 +1,27 @@
 {
   "manifest_version": 2,
   "name": "gbf-search",
-  "version":"0.0.7",
+  "version":"0.2.0",
   "description":"お空の戦いを探す",
   "icons":{
-    "128":"dest/images/gbf-search-icon-128.png"
   },
   "browser_action": {
     "default_popup": "dest/html/popup.html"
   },
   "background":{
     "scripts":[
-      "dest/js/socket.io.js",
+      "dest/js/bundle-twitter.js",
       "dest/js/background.js"
     ]
   },
   "permissions": [
-    "https://gbf-search.herokuapp.com/socket.io/socket.io.js",
     "https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js",
+    "https://stream.twitter.com/1.1/statuses/filter.json",
     "clipboardWrite",
     "storage"
   ],
   "web_accessible_resources": [
-    "dest/html/oauthPage.html*",
-    "dest/html/retweetSet.html"
   ],
-  "content_security_policy":"script-src 'self' https://gbf-search.herokuapp.com https://ajax.googleapis.com; object-src 'self'"
+  "content_security_policy":"script-src 'self' https://stream.twitter.com/1.1/statuses/filter.json https://ajax.googleapis.com; object-src 'self'"
 }
+

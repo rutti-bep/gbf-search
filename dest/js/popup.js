@@ -2,13 +2,13 @@ $(function() {
   var appToggle = $("#appToggle");
   var raidsListToggles = $(".raidsListToggles");
   var copyLogs = $("#copyLogs");
-  
+
 
   chrome.runtime.sendMessage({"method":"getRunApp"},(res)=>{
     appToggle.prop('checked', res["isRun"]);
     console.log(res)
   }); 
-  
+
   appToggle.click(()=>{
     appToggle.prop("checked");
     chrome.runtime.sendMessage({"method":"toggleRunApp"}); 
@@ -20,21 +20,21 @@ $(function() {
       $("#raidsList"+$(toggleElm).data("level")).slideToggle();
     });
   });
-  
+
   //raids情報取得
   var raids = {}
   var raidsCopyList = [];
   var getRaids = new Promise((resolve,reject)=>{
-      chrome.runtime.sendMessage({"method":"getRaids"},(res)=>{
-        raids = res.raids;
-        resolve()
-      })
+    chrome.runtime.sendMessage({"method":"getRaids"},(res)=>{
+      raids = res.raids;
+      resolve()
+    })
   });
   var getCopyList = new Promise((resolve,reject)=>{
-      chrome.runtime.sendMessage({"method":"getCopyList"},(res)=>{
-        raidsCopyList = res.list;
-        resolve()
-      })
+    chrome.runtime.sendMessage({"method":"getCopyList"},(res)=>{
+      raidsCopyList = res.list;
+      resolve()
+    })
   });
   Promise.all([getRaids,getCopyList])
     .then(function(){
@@ -49,7 +49,6 @@ $(function() {
               let $raidToggleButton = $('<input></input>',{
                 type: "checkbox",
                 checked: raidsCopyList.includes(raidName),
-                //css: {float:"left"},
                 on: {
                   click:()=> { 
                     var isCopy = $raidToggleButton.prop("checked");
@@ -73,63 +72,4 @@ $(function() {
           });
       });
     });
-
-
-chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-    console.log(request);
-    switch (request.method){
-      case "raidsAdd":
-        raids["Other"][0].push(request.raid);
-        console.log(raids["Other"][0]);
-        raidsOtherSort();
-        raidsOtherListUpdate();
-        break;
-    }
-});
-
-  function raidsOtherSort(){
-    raids["Other"][0].sort(function(a,b){
-      var aLv = Number(a.slice(2,5).replace(" ",""));
-      var bLv = Number(b.slice(2,5).replace(" ",""));
-      var _return;
-      if(aLv == bLv){
-        return a.localeCompare(b);
-      }else{
-        return aLv >= bLv ? 1 : -1;
-      }
-    })
-  }
-
-  function raidsOtherListUpdate(){
-    $List = $("#raidsListOther");
-    $List.empty();
-    $listOrderedList = $("<ol></ol>")
-    raids["Other"][0].forEach((raid,index)=>{
-      var $raidSpan = $("<li></li>");
-      let $raidToggleButton = $('<input></input>',{
-        type: "checkbox",
-        checked: raidsCopyList.includes(raid),
-        //css: {float:"left"},
-        on: {
-          click:()=> { 
-            var isCopy = $raidToggleButton.prop("checked");
-            if(isCopy){
-              chrome.runtime.sendMessage({"method":"addCopyList","raid":raid});
-            }else{
-              chrome.runtime.sendMessage({"method":"deleteCopyList","raid":raid});
-            }
-          }
-        }
-      });
-      let $raidNameLabel = $('<div></div>',{
-        text:raid,
-        css: {"display": "inline"}
-      });
-      $raidSpan.append($raidToggleButton);
-      $raidSpan.append($raidNameLabel);
-      $listOrderedList.append($raidSpan);
-    })
-    $List.append($listOrderedList)
-  }
-
 });
