@@ -5,15 +5,29 @@
   <script src="../js/options.js"></script>
 </head>
 <body>
+  <div id="twitter-auth">
+    <div>
+      gbf-searchはv0.2.1からtwitter連携が必要になりました。<br>
+      いままで開発者のツイッター情報をつかってアクセスしていたのですが、<br>
+      v0.2.0にてツイッターと直接やりとりをするようにしたためアクセス数が増えてしまい<br>
+      ツイートが受け取れない状態が続いていました。<br>
+      そのためみなさまのアクセス情報を使ってツイートを受け取るようにしました。<br>
+      アクセス権限はサーバーに送信などはしておらず、手元のみで完結するようになっている（コードは公開しています）ため<br>
+      ご協力お願いします<br>
+    </div>
+    <button class="auth-button">ツイッター連携をします</button>
+  </div>
+
   <div id="raids-add">
     <div>レイドの追加</div>
     <input type="text"></input>
     <button class="save-button">保存</button>
   </div>
-
+  <!--
   <div id="sound-save">
     <div>サウンドの追加</div>
     <input type="file"></input>
     <button class="save-button">保存</button>
   </div>
+  -->
 </body>

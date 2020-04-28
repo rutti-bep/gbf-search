@@ -27,30 +27,55 @@ function setBadge(text){
   }
 }
 
+function jsonRead(path){
+  return new Promise((resolve,reject)=>{
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', chrome.runtime.getURL(path), true);
+    xhr.onreadystatechange = function() {
+      if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
+        resolve(xhr.responseText);
+      }else if(xhr.readyState == XMLHttpRequest.DONE){
+        reject(xhr);
+      }
+    }
+    xhr.send();
+  })
+}
+
 var raids = {};
 var raidsCopyList = localStorage.getItem("raidsCopyList")!==null?JSON.parse(localStorage.getItem("raidsCopyList")):[];
-var file = 'dest/json/raids.json';
+var raidsPath = 'dest/json/raids.json';
 
-var xhr = new XMLHttpRequest();
-xhr.open('GET', chrome.runtime.getURL(file), true);
-xhr.onreadystatechange = function() {
-  if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
-    raids = JSON.parse(xhr.responseText);
+jsonRead(raidsPath)
+  .then((res)=>{
+    raids = JSON.parse(res);
     raids["Other"] = [new Array()];
     console.log(raids)
-  }
-}
-xhr.send();
+  })
+.catch((err)=>{return console.log("error",err)})
 
-//ひ・み・つ
-const tokens = {
-      consumer_key:"DB7Fo4mQh2oKEGlTmH5LRAtGQ",
-      consumer_secret:"MbOLda86zlX4XIh5EbJJdum93cVK8j2Cg2Qps4UQ8Z9Bq4bziN",
-      access_token_key:"715302500379693056-6iD7svP3K38Ht55bS6ZxIjl4gY7r2UH",
-      access_token_secret:"P5Brj4NUFrvpu8TPgZGqur6gH3WRYgtaJMH5mTyeuB4O7"
-}
+var tokens,config;
+var tokensPath = 'tokens.json';
+var twitterController;
 
-const twitterController = new twitterConnectionController(tokens);
+jsonRead(tokensPath)
+  .then((res)=>{
+    tokens = JSON.parse(res);
+    config = {
+      "request_url": "https://api.twitter.com/oauth/request_token",
+      "authorize_url": "https://api.twitter.com/oauth/authorize",
+      "access_url": "https://api.twitter.com/oauth/access_token",
+      "consumer_key": tokens["consumer_key"],
+      "consumer_secret": tokens["consumer_secret"]
+    }
+    if(localStorage.getItem("oauth_tokenundefined")!==null){
+       tokens["access_token_key"] = localStorage.getItem("oauth_tokenundefined");
+       tokens["access_token_secret"] = localStorage.getItem("oauth_token_secretundefined");    
+       twitterController = new twitterConnectionController(tokens); 
+    }
+  })
+.catch((err)=>{return console.log("error",err)})
+
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   var response = {"status":true};
@@ -98,11 +123,17 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     case "getRaids":
       response["raids"]=raids;
       break;
+    case "twitterAuth":
+      var oauth = ChromeExOAuth.initBackgroundPage(config);
+      oauth.callback_page = 'dest/html/oauthPage.html';
+      oauth.authorize((token, secret) => {
+        console.log(token, secret);
+        tokens["access_token_key"] = token;
+        tokens["access_token_secret"] = secret;    
+        twitterController = new twitterConnectionController(tokens);
+      })
+      break;
   }
   console.log(response);
   sendResponse(response);
 });
-
-
-
-

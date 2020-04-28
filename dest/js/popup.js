@@ -3,7 +3,6 @@ $(function() {
   var raidsListToggles = $(".raidsListToggles");
   var copyLogs = $("#copyLogs");
 
-
   chrome.runtime.sendMessage({"method":"getRunApp"},(res)=>{
     appToggle.prop('checked', res["isRun"]);
     console.log(res)
@@ -20,6 +19,10 @@ $(function() {
       $("#raidsList"+$(toggleElm).data("level")).slideToggle();
     });
   });
+
+  if(localStorage.getItem("oauth_tokenundefined")!==null){
+    $("#version-message").remove();
+  }
 
   //raids情報取得
   var raids = {}
