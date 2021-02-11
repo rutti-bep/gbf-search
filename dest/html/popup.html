@@ -9,18 +9,18 @@
   <div id="version-message"><strong>gbf-searchはv0.2.1からツイッター連携が必要になりました。</strong><br>
     くわしくは<a href="./options.html" target="_blank">こちら</a>
   </div>
-  <input type="checkbox" id="appToggle" checked>←データ読み込みon/off</input>
+  <input type="checkbox" id="appToggle">←データ読み込みon/off</input>
+  <input type="radio" name="raidsListToggles" data-level="Normal" checked>Normal開閉</input>
+  <input type="radio" name="raidsListToggles" data-level="HighLevel">HighLevel開閉</input>
+  <input type="radio" name="raidsListToggles" data-level="Other">Other開閉</input>
   <div>
-    <input type="checkbox" class="raidsListToggles" data-level="Normal" checked>Normal開閉</input>
-    <div id="raidsListNormal"></div>
+    <div id="raidsListNormal" class="raidsLists"></div>
   </div>
   <div>
-    <input type="checkbox" class="raidsListToggles" data-level="HighLevel" checked>HighLevel開閉</input>
-    <div id="raidsListHighLevel"></div>
+    <div id="raidsListHighLevel" class="raidsLists"></div>
   </div>
   <div>
-    <input type="checkbox" class="raidsListToggles" data-level="Other" checked>Other開閉</input>
-    <div id="raidsListOther"></div>
+    <div id="raidsListOther" class="raidsLists"></div>
   </div>
   <div id="copyLogs"></div>
 </body>

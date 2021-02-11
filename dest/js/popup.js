@@ -1,6 +1,5 @@
 $(function() {
   var appToggle = $("#appToggle");
-  var raidsListToggles = $(".raidsListToggles");
   var copyLogs = $("#copyLogs");
 
   chrome.runtime.sendMessage({"method":"getRunApp"},(res)=>{
@@ -13,11 +12,12 @@ $(function() {
     chrome.runtime.sendMessage({"method":"toggleRunApp"}); 
   });
 
-  raidsListToggles.each((i,toggleElm)=>{
-    $(toggleElm).click(()=>{
-      $(toggleElm).prop("checked");
-      $("#raidsList"+$(toggleElm).data("level")).slideToggle();
-    });
+
+  $("input[name=raidsListToggles]:radio").change(function(){
+    var val = $(this).data("level")
+    $(".raidsLists").css("display","none")
+      $("#raidsList"+val).slideDown();
+    console.log(val)
   });
 
   if(localStorage.getItem("oauth_tokenundefined")!==null){

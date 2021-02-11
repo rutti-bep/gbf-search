@@ -1,8 +1,11 @@
 body{
   width:370px;
+  height:600px;
+  background-image: -webkit-linear-gradient(left, #88aeb7 0%,#b8d0d3 5%,#cfe8eb 20%,#d2d4cf 80%,#c7cebd 95%,#afc1c5 100%);
 }
 button{
   width:50%;
   height:100px;
   float:left;
 }
+
