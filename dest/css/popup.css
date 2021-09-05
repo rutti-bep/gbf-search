@@ -25,24 +25,25 @@ li{
   display:block;
   box-sizing:border-box;
   text-align:center;
-/*  border:1px solid #eee;
-  */
+  border:1px solid red;
   border-radius: 15px;
   height:100%;
-  background: red;
-}
-#appToggleArea label span:after{
-  content:"OFF";
-  color:#aaa
-}
-#appToggleArea #appToggle:checked+label{
-  background: green;
-}
-#appToggleArea #appToggle:checked+label span:after{
-  content:"ON";
+  background: #00000000;
   color:#fff;
 }
+#appToggleArea label span:after{
+  content:"o";
+}
+#appToggleArea #appToggle:checked+label{
+  border:1px solid green;
+}
+#appToggleArea #appToggle:checked+label span:after{
+  content:"x";
+}
 
+.raidsLists {
+  display:none;
+}
 .LevelRadios {
   text-align: center;
 }
