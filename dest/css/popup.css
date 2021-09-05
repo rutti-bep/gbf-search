@@ -1,8 +1,80 @@
 body{
   width:370px;
+  height:600px;
+  background-color: #282840;
+  color: white;
 }
 button{
   width:50%;
   height:100px;
   float:left;
+}
+li{
+  list-style-type:none;
+}
+
+#appToggleArea {
+  width:30px;
+  height:30px;
+  float:left;
+}
+#appToggle {
+  display:none;
+}
+#appToggleArea label {
+  display:block;
+  box-sizing:border-box;
+  text-align:center;
+  border:1px solid red;
+  border-radius: 15px;
+  height:100%;
+  background: #00000000;
+  color:#fff;
+}
+#appToggleArea label span:after{
+  content:"o";
+}
+#appToggleArea #appToggle:checked+label{
+  border:1px solid green;
+}
+#appToggleArea #appToggle:checked+label span:after{
+  content:"x";
+}
+
+.raidsLists {
+  display:none;
+}
+.LevelRadios {
+  text-align: center;
+}
+.LevelRadios input[type="radio"]{
+  display:none;
+}
+.LevelRadios label{
+  display: inline-block;
+  padding: 4px 11px;
+  cursor: pointer;
+  color: white;
+  border-radius: 20px;
+}
+#NormalRadio+label{
+  border:1px solid #F7453A;
+  background-color:#00000000;
+}
+#NormalRadio:checked+label{
+  background-color:#F7453A;
+}
+#HighLevelRadio+label{
+  border:1px solid #7e5bc8;
+  background-color:#00000000;
+}
+#HighLevelRadio:checked+label{
+  background-color:#7e5bc8;
+}
+#OtherRadio+label{
+  border:1px solid #54c350;
+  background-color:#00000000;
+}
+#OtherRadio:checked+label{
+  background-color:#54c350;
 }
