@@ -137,3 +137,31 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   console.log(response);
   sendResponse(response);
 });
+
+let test = ()=>{
+  var timestamp = Math.floor(new Date().getTime()/1000);;
+  const url = 'https://stream.twitter.com/1.1/statuses/filter.json?track=vim';
+  const method = 'GET'
+  var request = OAuthSimple(tokens.consumer_key,tokens.consumer_secret).sign({
+                action:method,
+                method:"HMAC-SHA1",
+                dataType:"JSON",
+                path:url,
+                parameters:'',
+                signatures:{
+                    oauth_version:'1.0',
+                    oauth_token:tokens.access_token_key,
+                    oauth_secret:tokens.access_token_secret
+                }
+            });
+
+  console.log(request);
+
+  fetch(url,{
+    cache:'no-cache',
+    headers: {
+      'authorization':request.header
+//      'authorization':'OAuth oauth_consumer_key="'+request.parameters.oauth_consumer_key+'",oauth_nonce="'+request.parameters.oauth_nonce+'",oauth_signature_method="HMAC-SHA1",oauth_timestamp="'+request.parameters.oauth_timestamp+'",oauth_token="'+request.parameters.oauth_token+'",oauth_version="1.0",oauth_signature="'+ request.signature+'"'
+    }
+  }).then((res)=>console.log(res)).catch((e)=>{console.log("e",e)})
+}
