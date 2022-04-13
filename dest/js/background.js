@@ -122,25 +122,29 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
       response["raids"]=raids;
       break;
     case "fixOtherRaids":
-      var i=0;
-      for (const raidName of raids["Other"][0]){
-        if(request.oldBossName == raidName){
-          raids["Other"][0][i] = request.newBossName;
+      var i=raids["Other"][0].findIndex((elm)=>elm==request.oldBossName);
+        if(i>=0){
+          raids["Other"][0].splice(i,1,request.newBossName);
           localStorage.setItem("raidsOtherList",JSON.stringify(raids["Other"][0]))
-          break;
         }
-        i++;
-      }
-      i=0;
-      for (const raidName of raidsCopyList){
-        if(request.oldBossName == raidName){
-          raidsCopyList[i] = request.newBossName
+      i=raidsCopyList.findIndex((elm)=>elm==request.oldBossName);
+        if(i>=0){
+          raidsCopyList.splice(i,1,request.newBossName);
           localStorage.setItem("raidsCopyList",JSON.stringify(raidsCopyList)); 
-          break;
         }
-        i++;
-      }
       response["list"]=raids["Other"][0];
+      break;
+    case "deleteOtherRaid":
+      var i=raids["Other"][0].findIndex((elm)=>elm==request.bossName);
+        if(i>=0){
+          raids["Other"][0].splice(i,1);
+          localStorage.setItem("raidsOtherList",JSON.stringify(raids["Other"][0]))
+        }
+      i=raidsCopyList.findIndex((elm)=>elm==request.bossName);
+        if(i>=0){
+          raidsCopyList.splice(i,1)
+          localStorage.setItem("raidsCopyList",JSON.stringify(raidsCopyList));
+        }
       break;
     case "getRaids":
       response["raids"]=raids;

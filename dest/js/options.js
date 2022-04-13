@@ -50,8 +50,22 @@ $(function() {
                 }
             }
         })
+        const $raidNameDelete = $("<input></input>",{
+          type:"button",
+          value: "削除",
+          on:{
+            click:()=>{
+              SendMessage({"method":"deleteOtherRaid","bossName":raidName})
+              .then(()=>{
+                console.log('delete',raidName)
+                OtherListUpd();
+              })
+            }
+          }
+        })
         $raidSpan.append($raidNameInput);
         $raidSpan.append($raidNameSubmit)
+        $raidSpan.append($raidNameDelete)
         $raidsOtherList.append($raidSpan);
       });
   }
