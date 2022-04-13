@@ -16,10 +16,10 @@ $(function() {
   $("input[name=raidsListToggles]:radio").change(function(){
     var val = $(this).data("level");
     $(".raidsLists").css("display","none");
-    $("#raidsList"+val).slideDown();
+    $("#raidsList"+val).css("display","block");
     console.log(val)
   });
-  $("#raidsListNormal").slideDown();//初期化
+  $("#raidsListNormal").css("display","block");//初期化
 
   if(localStorage.getItem("oauth_tokenundefined")!==null){
     $("#version-message").remove();

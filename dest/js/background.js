@@ -49,7 +49,7 @@ var raidsPath = 'dest/json/raids.json';
 jsonRead(raidsPath)
   .then((res)=>{
     raids = JSON.parse(res);
-    raids["Other"] = [new Array()];
+    raids["Other"] = [localStorage.getItem("raidsOtherList")!==null?JSON.parse(localStorage.getItem("raidsOtherList")):[]];
     console.log(raids)
   })
 .catch((err)=>{return console.log("error",err)})
@@ -118,7 +118,29 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
       break;
     case "addOtherRaids":
       raids["Other"][0].push(request.bossName);
+      localStorage.setItem("raidsOtherList",JSON.stringify(raids["Other"][0]))
       response["raids"]=raids;
+      break;
+    case "fixOtherRaids":
+      var i=0;
+      for (const raidName of raids["Other"][0]){
+        if(request.oldBossName == raidName){
+          raids["Other"][0][i] = request.newBossName;
+          localStorage.setItem("raidsOtherList",JSON.stringify(raids["Other"][0]))
+          break;
+        }
+        i++;
+      }
+      i=0;
+      for (const raidName of raidsCopyList){
+        if(request.oldBossName == raidName){
+          raidsCopyList[i] = request.newBossName
+          localStorage.setItem("raidsCopyList",JSON.stringify(raidsCopyList)); 
+          break;
+        }
+        i++;
+      }
+      response["list"]=raids["Other"][0];
       break;
     case "getRaids":
       response["raids"]=raids;
