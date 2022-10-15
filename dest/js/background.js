@@ -4,9 +4,9 @@ function translateRaidsList(list){
   var returnList = [];
     list.forEach(item =>{
         Object.keys(raids).forEach(d => {
-            Object.keys(d).forEach(n => {
-                Object.keys(n).forEach(r => {
-                    if(r[0] == item){returnList.push(r[1])};
+            Object.keys(raids[d]).forEach(n => {
+                Object.keys(raids[d][n]).forEach(r => {
+                    if(raids[d][n][r][0] == item){returnList.push(raids[d][n][r][1])};
                 });
             });
         });
@@ -110,7 +110,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         setBadge("red"); 
         response["isRun"]=false;
       }else{
-        twitterController.StartStream(raidsCopyList);
+        twitterController.StartStream(raidsCopyList,translateRaidsList(raidsCopyList));
         response["isRun"]=true;
       }
       break;
@@ -122,7 +122,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
       localStorage.setItem("raidsCopyList",JSON.stringify(raidsCopyList));
       if(twitterController.stream!=null){
         twitterController.StopStream();
-        twitterController.StartStream(raidsCopyList.concat(translateRaidsList(raidsCopyList)));
+        twitterController.StartStream(raidsCopyList,translateRaidsList(raidsCopyList));
       }
       response["list"]=raidsCopyList;
       break;
@@ -133,7 +133,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
       localStorage.setItem("raidsCopyList",JSON.stringify(raidsCopyList)); 
       if(twitterController.stream!=null){
         twitterController.StopStream();
-        twitterController.StartStream(raidsCopyList.concat(translateRaidsList(raidsCopyList)));
+        twitterController.StartStream(raidsCopyList,translateRaidsList(raidsCopyList));
       }
       response["list"]=raidsCopyList;
       break;

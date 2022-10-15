@@ -36160,9 +36160,9 @@ class twitterConnectionController{
     this.stream = null;
   }
 
-  StartStream(raids){
+  StartStream(jpRaids,enRaids){
     const twit = new twitter(this.tokens);
-    const keyword = "ID Battle,参加者募集！ "+raids.join(","); //検索語句 ID
+    const keyword = "ID 参加者募集！ "+jpRaids.join(",ID 参加者募集！ ")+",ID Battle "+enRaids.join(",ID Battle "); //検索語句 ID
     const option = {'track': keyword};
     console.log(keyword);
     this.stream = twit.stream('statuses/filter', option);
