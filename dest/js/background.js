@@ -1,7 +1,28 @@
 console.log("load : background.js")
 
-function clipboardCopy(str){
-  var _battleId = str.match(/[0-9A-Z]{8}\s:参戦ID/);
+function translateRaidsList(list){
+  var returnList = [];
+    list.forEach(item =>{
+        Object.keys(raids).forEach(d => {
+            Object.keys(raids[d]).forEach(n => {
+                Object.keys(raids[d][n]).forEach(r => {
+                    if(raids[d][n][r][0] == item){returnList.push(raids[d][n][r][1])};
+                });
+            });
+        });
+    })
+  return returnList;
+}
+
+function clipboardCopy(str,lang){
+  switch(lang){
+    case "jp":
+      var _battleId = str.match(/[0-9A-Z]{8}\s:参戦ID/);
+      break;
+    case "en":
+      var _battleId = str.match(/[0-9A-Z]{8}\s:Battle/);
+      break;
+  }
   var battleId = _battleId[0].slice(0,8);
   var textArea = document.createElement("textarea");
   textArea.style.cssText = "position:absolute;left:-100%";
@@ -89,7 +110,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         setBadge("red"); 
         response["isRun"]=false;
       }else{
-        twitterController.StartStream(raidsCopyList);
+        twitterController.StartStream(raidsCopyList,translateRaidsList(raidsCopyList));
         response["isRun"]=true;
       }
       break;
@@ -101,7 +122,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
       localStorage.setItem("raidsCopyList",JSON.stringify(raidsCopyList));
       if(twitterController.stream!=null){
         twitterController.StopStream();
-        twitterController.StartStream(raidsCopyList);
+        twitterController.StartStream(raidsCopyList,translateRaidsList(raidsCopyList));
       }
       response["list"]=raidsCopyList;
       break;
@@ -112,7 +133,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
       localStorage.setItem("raidsCopyList",JSON.stringify(raidsCopyList)); 
       if(twitterController.stream!=null){
         twitterController.StopStream();
-        twitterController.StartStream(raidsCopyList);
+        twitterController.StartStream(raidsCopyList,translateRaidsList(raidsCopyList));
       }
       response["list"]=raidsCopyList;
       break;

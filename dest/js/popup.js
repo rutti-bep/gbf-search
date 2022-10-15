@@ -52,21 +52,21 @@ $(function() {
               var $raidSpan = $("<li></li>");
               let $raidToggleButton = $('<input></input>',{
                 type: "checkbox",
-                checked: raidsCopyList.includes(raidName),
+                checked: raidsCopyList.includes(raidName[0]),
                 on: {
                   click:()=> { 
                     var isCopy = $raidToggleButton.prop("checked");
                     if(isCopy){
-                      chrome.runtime.sendMessage({"method":"addCopyList","raid":raidName});
+                      chrome.runtime.sendMessage({"method":"addCopyList","raid":raidName[0]});
                     }else{
-                      chrome.runtime.sendMessage({"method":"deleteCopyList","raid":raidName});
+                      chrome.runtime.sendMessage({"method":"deleteCopyList","raid":raidName[0]});
                     }
                     console.log(raidsCopyList)
                   }
                 }
               });
               let $raidNameLabel = $('<div></div>',{
-                text:raidName,
+                text:raidName[0],
                 css: {"display": "inline"}
               });
               $raidSpan.append($raidToggleButton);

@@ -1,21 +1,102 @@
 {
   "Normal":{
-    "2":["Lv50 ティアマト・マグナ","Lv70 コロッサス・マグナ","Lv60 リヴァイアサン・マグナ","Lv60 ユグドラシル・マグナ","Lv75 シュヴァリエ・マグナ","Lv75 セレスト・マグナ"],
-    "3":["Lv100 ナタク","Lv100 フラム＝グラス","Lv100 マキュラ・マリウス","Lv100 メドゥーサ","Lv100 アポロン","Lv100 Dエンジェル・オリヴィエ"],
-    "4":["Lv100 アテナ","Lv100 グラニ","Lv100 バアル","Lv100 ガルーダ","Lv100 オーディン","Lv100 リッチ"],
-    "5":["Lv100 ジ・オーダー・グランデ","Lv100 プロトバハムート","Lv100 黄龍","Lv100 黒麒麟"],
-    "6":["Lv100 ミカエル","Lv100 ガブリエル","Lv100 ウリエル","Lv100 ラファエル"],
-    "7":["Lv150 アルティメットバハムート"]
+    "1":[
+      ["Lv30 ティアマト","Lvl 30 Tiamat"],
+      ["Lv30 コロッサス","Lvl 30 Colossus"],
+      ["Lv30 リヴァイアサン","Lvl 30 Leviathan"],
+      ["Lv30 ユグドラシル","Lvl 30 Yggdrasil"],
+      ["Lv30 アドウェルサ","Lvl 30 Adversa"],
+      ["Lv30 セレスト","Lvl 30 Celeste"]
+    ],
+    "2":[
+      ["Lv50 ティアマト・マグナ","Lvl 50 Tiamat Omega"],
+      ["Lv70 コロッサス・マグナ","Lvl 70 Colossus Omega"],
+      ["Lv60 リヴァイアサン・マグナ","Lvl 60 Leviathan Omega"],
+      ["Lv60 ユグドラシル・マグナ","Lvl 60 Yggdrasil Omega"],
+      ["Lv75 シュヴァリエ・マグナ","Lvl 75 Luminiera Omega"],
+      ["Lv75 セレスト・マグナ","Lvl 75 Celeste Omega"]
+    ],
+    "3":[
+      ["Lv100 アテナ","Lvl 100 Athena"],
+      ["Lv100 グラニ","Lvl 100 Grani"],
+      ["Lv100 バアル","Lvl 100 Baal"],
+      ["Lv100 ガルーダ","Lvl 100 Garuda"],
+      ["Lv100 オーディン","Lvl 100 Odin"],
+      ["Lv100 リッチ","Lvl 100 Lich"]
+    ],
+    "4":[
+      ["Lv100 ジ・オーダー・グランデ","Lvl 100 Grand Order"],
+      ["Lv100 プロトバハムート","Lvl 100 Proto Bahamut"],
+      ["Lv100 黄龍","Lvl 100 Huanglong"],
+      ["Lv100 黒麒麟","Lvl 100 Qilin"]
+    ],
+    "5":[
+      ["Lv100 ミカエル","Lvl 100 Michael"],
+      ["Lv100 ガブリエル","Lvl 100 Gabriel"],
+      ["Lv100 ウリエル","Lvl 100 Uriel"],
+      ["Lv100 ラファエル","Lvl 100 Raphael"]
+    ]
   },
   "HighLevel":{
-    "1":["Lv100 ティアマト・マグナ＝エア","Lv100 コロッサス・マグナ","Lv100 リヴァイアサン・マグナ","Lv100 ユグドラシル・マグナ","Lv100 シュヴァリエ・マグナ","Lv100 セレスト・マグナ"],
-    "2":["Lv120 ナタク","Lv120 フラム＝グラス","Lv120 マキュラ・マリウス","Lv120 メドゥーサ","Lv120 アポロン","Lv120 Dエンジェル・オリヴィエ","Lv110 ローズクイーン"],
-    "3":["Lv120 シヴァ","Lv120 エウロペ","Lv120 ゴッドガード・ブローディア","Lv120 グリームニル","Lv120 メタトロン","Lv120 アバター"],
-    "4":["Lv120 プロメテウス","Lv120 カー・オン","Lv120 ギルガメッシュ","Lv120 バイヴカハ","Lv120 ヘクトル","Lv120 アヌビス"],
-    "5":["Lv150 ティアマト・マリス","Lv150 リヴァイアサン・マリス","Lv150 フロネシス","Lv150 シュヴァリエ・マリス","Lv150 アニマ・アニムス・コア"], 
-    "6":["黄龍・黒麒麟HL","Lv150 ルシファー","四大天司ＨＬ","Lv200 リンドヴルム"],
-    "7":["Lv200 ウィルナス","Lv200 ワムデュス","Lv200 ガレヲン","Lv200 イーウィヤ","Lv200 ル・オー","Lv200 フェディエル"],
-    "8":["Lv150 プロトバハムート","Lv200 アーカーシャ","Lv200 ジ・オーダー・グランデ","Lv200 アルティメットバハムート"],
-    "9":["Lv250 ルシファー","Lv250 ベルゼバブ","Lv250 ベリアル"]
+    "1":[
+      ["Lv100 ティアマト・マグナ＝エア","Lvl 100 Tiamat Omega Ayr"],
+      ["Lv100 コロッサス・マグナ","Lvl 100 Colossus Omega"],
+      ["Lv100 リヴァイアサン・マグナ","Lvl 100 Leviathan Omega"],
+      ["Lv100 ユグドラシル・マグナ","Lvl 100 Yggdrasil Omega"],
+      ["Lv100 シュヴァリエ・マグナ","Lvl 100 Luminiera Omega"],
+      ["Lv100 セレスト・マグナ","Lvl 100 Celeste Omega"]
+    ],
+    "2":[
+      ["Lv120 シヴァ","Lvl 120 Shiva"],
+      ["Lv120 エウロペ","Lvl 120 Europa"],
+      ["Lv120 ゴッドガード・ブローディア","Lvl 120 Godsworn Alexiel"],
+      ["Lv120 グリームニル","Lvl 120 Grimnir"],
+      ["Lv120 メタトロン","Lvl 120 Metatron"],
+      ["Lv120 アバター","Lvl 120 Avatar"],
+      ["Lv110 ローズクイーン","Lvl 110 Rose Queen"],
+      ["Lv120 アトゥム","Lvl 120 Atum"],
+      ["Lv120 テフヌト","Lvl 120 Tefnut"],
+      ["Lv120 ベンヌ","Lvl 120 Bennu"],
+      ["Lv120 ラー","Lvl 120 Ra"],
+      ["Lv120 ホルス","Lvl 120 Horus"],
+      ["Lv120 オシリス","Lvl 120 Osiris"]
+    ],
+    "3":[
+      ["Lv150 ティアマト・マリス","Lvl 150 Tiamat Malice"],
+      ["Lv150 リヴァイアサン・マリス","Lvl 150 Leviathan Malice"],
+      ["Lv150 フロネシス","Lvl 150 Phronesis"],
+      ["Lv150 シュヴァリエ・マリス","Lvl 150 Luminiera Malic"],
+      ["Lv150 アニマ・アニムス・コア","Lvl 150 Anima-Animus Core"]
+    ],
+    "4":[
+      ["黄龍・黒麒麟HL","Huanglong & Qilin (Impossible)"],
+      ["Lvl 150 Lucilius","Lv150 ルシファー"],
+      ["四大天司ＨＬ","The Four Primarchs"],
+      ["Lv200 リンドヴルム","Lvl 200 Lindwurm"]
+    ],
+    "5":[
+      ["Lv200 ウィルナス","Lvl 200 Wilnas"],
+      ["Lv200 ワムデュス","Lvl 200 Wamdus"],
+      ["Lv200 ガレヲン","Lvl 200 Galleon"],
+      ["Lv200 イーウィヤ","Lvl 200 Ewiyar"],
+      ["Lv200 ル・オー","Lvl 200 Lu Woh"],
+      ["Lv200 フェディエル","Lvl 200 Fediel"]
+    ],
+    "6":[
+      ["Lv150 プロトバハムート","Lvl 150 Proto Bahamut"],
+      ["Lv200 アーカーシャ","Lvl 200 Akasha"],
+      ["Lv200 ジ・オーダー・グランデ","Lvl 200 Grand Order"],
+      ["Lv200 アルティメットバハムート","Lvl 200 Ultimate Bahamut"]
+    ],
+    "7":[
+      ["Lv250 ルシファー","Lvl 250 Lucilius"],
+      ["Lv250 ベルゼバブ","Lvl 250 Beelzebub"],
+      ["Lv250 ベリアル","Lvl 250 Belial"]
+    ],
+    "8":[
+      ["Lv275 ムゲン","Lvl 275 Mugen"],
+      ["Lv275 ディアスポラ","Lvl 275 Diaspora"],
+      ["Lv300 スーパーアルティメットバハムート","Lvl 300 Super Ultimate Bahamut"]
+    ]
   }
 }
