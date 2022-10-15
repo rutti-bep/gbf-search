@@ -1,5 +1,19 @@
 console.log("load : background.js")
 
+function translateRaidsList(list){
+  var returnList = [];
+    list.forEach(item =>{
+        Object.keys(raids).forEach(d => {
+            Object.keys(d).forEach(n => {
+                Object.keys(n).forEach(r => {
+                    if(r[0] == item){returnList.push(r)};
+                });
+            });
+        });
+    })
+  return returnList;
+}
+
 function clipboardCopy(str,lang){
   switch(lang){
     case "jp":
@@ -108,7 +122,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
       localStorage.setItem("raidsCopyList",JSON.stringify(raidsCopyList));
       if(twitterController.stream!=null){
         twitterController.StopStream();
-        twitterController.StartStream(raidsCopyList);
+        twitterController.StartStream(raidsCopyList.concat(translateRaidsList(raidsCopyList)));
       }
       response["list"]=raidsCopyList;
       break;
@@ -119,7 +133,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
       localStorage.setItem("raidsCopyList",JSON.stringify(raidsCopyList)); 
       if(twitterController.stream!=null){
         twitterController.StopStream();
-        twitterController.StartStream(raidsCopyList);
+        twitterController.StartStream(raidsCopyList.concat(translateRaidsList(raidsCopyList)));
       }
       response["list"]=raidsCopyList;
       break;
