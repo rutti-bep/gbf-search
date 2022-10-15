@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "gbf-search",
-  "version":"0.2.3",
+  "version":"0.2.4",
   "description":"お空の戦いを探す",
   "icons":{
     "128":"dest/images/gbf-search-icon-128.png"
