@@ -1,7 +1,14 @@
 console.log("load : background.js")
 
-function clipboardCopy(str){
-  var _battleId = str.match(/[0-9A-Z]{8}\s:参戦ID/);
+function clipboardCopy(str,lang){
+  switch(lang){
+    case "jp":
+      var _battleId = str.match(/[0-9A-Z]{8}\s:参戦ID/);
+      break;
+    case "en":
+      var _battleId = str.match(/[0-9A-Z]{8}\s:Battle/);
+      break;
+  }
   var battleId = _battleId[0].slice(0,8);
   var textArea = document.createElement("textarea");
   textArea.style.cssText = "position:absolute;left:-100%";
