@@ -6,7 +6,7 @@ function translateRaidsList(list){
         Object.keys(raids).forEach(d => {
             Object.keys(d).forEach(n => {
                 Object.keys(n).forEach(r => {
-                    if(r[0] == item){returnList.push(r)};
+                    if(r[0] == item){returnList.push(r[1])};
                 });
             });
         });
